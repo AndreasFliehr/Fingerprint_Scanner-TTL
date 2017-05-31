@@ -6,9 +6,9 @@
 	TLDR; Wil Wheaton's Law
 */
 
-#include "FPS_GT511C3.h";
+#include "FPS_GT511C3.h"
 
-#pragma region -= Command_Packet Definitions =-
+// Command_Packet Definitions
 
 // returns the 12 bytes of the generated command packet
 // remember to call delete on the returned array
@@ -80,9 +80,9 @@ word Command_Packet::_CalculateChecksum()
 Command_Packet::Command_Packet()
 {
 };
-#pragma endregion
 
-#pragma region -= Response_Packet Definitions =-
+// Response_Packet Definitions
+
 // creates and parses a response packet from the finger print scanner
 Response_Packet::Response_Packet(byte* buffer, bool UseSerialDebug)
 {
@@ -202,19 +202,19 @@ bool Response_Packet::CheckParsing(byte b, byte propervalue, byte alternatevalue
 	}
 
 }
-#pragma endregion
 
-#pragma region -= Data_Packet =-
+// Data_Packet
+
 //void Data_Packet::StartNewPacket()
 //{
 //	Data_Packet::NextPacketID = 0;
 //	Data_Packet::CheckSum = 0;
 //}
-#pragma endregion
 
-#pragma region -= FPS_GT511C3 Definitions =-
+// FPS_GT511C3 Definitions
 
-#pragma region -= Constructor/Destructor =-
+// Constructor/Destructor
+
 // Creates a new object to interface with the fingerprint scanner
 FPS_GT511C3::FPS_GT511C3(uint8_t rx, uint8_t tx)
 	: _serial(rx,tx)
@@ -230,9 +230,9 @@ FPS_GT511C3::~FPS_GT511C3()
 {
 	_serial.~SoftwareSerial();
 }
-#pragma endregion
 
-#pragma region -= Device Commands =-
+// Device Commands
+
 //Initialises the device and gets ready for commands
 void FPS_GT511C3::Open()
 {
@@ -619,9 +619,9 @@ bool FPS_GT511C3::CaptureFinger(bool highquality)
 	return retval;
 
 }
-#pragma endregion
 
-#pragma region -= Not imlemented commands =-
+// Not imlemented commands
+
 // Gets an image that is 258x202 (52116 bytes) and returns it in 407 Data_Packets
 // Use StartDataDownload, and then GetNextDataPacket until done
 // Returns: True (device confirming download starting)
@@ -709,10 +709,10 @@ bool FPS_GT511C3::CaptureFinger(bool highquality)
 // UpgradeISOCDImage - Data sheet says not supported
 // SetIAPMode - for upgrading firmware (which data sheet says is not supported)
 // Ack and Nack	are listed as commands for some unknown reason... not implemented
-#pragma endregion
 
 
-#pragma region -= Private Methods =-
+// Private Methods
+
 // Sends the command to the software serial channel
 void FPS_GT511C3::SendCommand(byte cmd[], int length)
 {
@@ -743,7 +743,7 @@ Response_Packet* FPS_GT511C3::GetResponse()
 	resp[0] = firstbyte;
 	for (int i=1; i < 12; i++)
 	{
-		while (_serial.available() == false) delay(10);
+		while (_serial.available() == false) Timer::getInstance().delay(10);
 		resp[i]= (byte) _serial.read();
 	}
 	Response_Packet* rp = new Response_Packet(resp, UseSerialDebug);
@@ -778,7 +778,3 @@ void FPS_GT511C3::serialPrintHex(byte data)
   sprintf(tmp, "%.2X",data);
   Serial.print(tmp);
 }
-#pragma endregion
-
-#pragma endregion
-
