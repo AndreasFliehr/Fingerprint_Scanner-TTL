@@ -8,6 +8,7 @@
 
 #include "FPS_GT511C3.h"
 #include "Timer.h"
+#include "State.h"
 
 // Command_Packet Definitions
 
@@ -247,7 +248,7 @@ void FPS_GT511C3::Open()
 	byte* packetbytes = cp->GetPacketBytes();
 	delete cp;
 	SendCommand(packetbytes, 12);
-	Response_Packet* rp = GetResponse();
+	Response_Packet* rp = GetResponse(); // gets stuck here if scanner is not connected
 	delete rp;
 	delete packetbytes;
 }
@@ -729,6 +730,10 @@ void FPS_GT511C3::SendCommand(byte cmd[], int length)
 // Gets the response to the command from the software serial channel (and waits for it)
 Response_Packet* FPS_GT511C3::GetResponse()
 {
+	using namespace SetupStates;
+	unsigned long currentMillis;
+	unsigned long previousMillis = Timer::getInstance().millis();
+
 	byte firstbyte = 0;
 	bool done = false;
 	_serial.listen();
@@ -738,6 +743,12 @@ Response_Packet* FPS_GT511C3::GetResponse()
 		if (firstbyte == Response_Packet::COMMAND_START_CODE_1)
 		{
 			done = true;
+		}
+		currentMillis = Timer::getInstance().millis();
+		if (currentMillis - previousMillis >= 2000){
+			Serial.println("FPS not connected"/*NOT_CONNECTED*/);
+			//State::getInstance().setSetupState(NOT_CONNECTED);
+			return;
 		}
 	}
 	byte* resp = new byte[12];
