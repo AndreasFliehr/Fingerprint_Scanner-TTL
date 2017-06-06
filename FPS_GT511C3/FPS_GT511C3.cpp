@@ -746,8 +746,8 @@ Response_Packet* FPS_GT511C3::GetResponse()
 		}
 		currentMillis = Timer::getInstance().millis();
 		if (currentMillis - previousMillis >= 2000){
-			Serial.println("FPS not connected"/*NOT_CONNECTED*/);
-			//State::getInstance().setSetupState(NOT_CONNECTED);
+			Serial.println("FPS not connected");
+			State::getInstance().setSetupState(NOT_CONNECTED);
 			return;
 		}
 	}
