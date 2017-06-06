@@ -755,7 +755,7 @@ Response_Packet* FPS_GT511C3::GetResponse()
 	resp[0] = firstbyte;
 	for (int i=1; i < 12; i++)
 	{
-		while (_serial.available() == false) Timer::getInstance().delay(10);
+		while (_serial.available() == false) Timer::getInstance().delayMilliseconds(10);
 		resp[i]= (byte) _serial.read();
 	}
 	Response_Packet* rp = new Response_Packet(resp, UseSerialDebug);
