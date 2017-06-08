@@ -9,8 +9,8 @@
 #ifndef FPS_GT511C3_h
 #define FPS_GT511C3_h
 
-#include <Arduino.h>
 #include "SoftwareSerial.h"
+#include <Arduino.h>
 
 // Command_Packet
 

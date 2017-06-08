@@ -7,8 +7,8 @@
 */
 
 #include "FPS_GT511C3.h"
-#include "Timer.h"
 #include "State.h"
+#include "Timer.h"
 
 // Command_Packet Definitions
 
