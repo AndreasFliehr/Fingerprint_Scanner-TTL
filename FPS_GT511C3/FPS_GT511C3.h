@@ -116,7 +116,7 @@ class Response_Packet
 
 				static Errors_Enum ParseFromBytes(byte high, byte low);
 		};
-		Response_Packet(byte* buffer, bool UseSerialDebug);
+		Response_Packet(byte* buffer);
 		ErrorCodes::Errors_Enum Error;
 		byte RawBytes[12];
 		byte ParameterBytes[4];
@@ -129,7 +129,7 @@ class Response_Packet
 		int IntFromParameter();
 
 	private:
-		bool CheckParsing(byte b, byte propervalue, byte alternatevalue, char* varname, bool UseSerialDebug);
+		bool CheckParsing(byte b, byte propervalue, byte alternatevalue, char* varname);
 		word CalculateChecksum(byte* buffer, int length);
 		byte GetHighByte(word w);
 		byte GetLowByte(word w);
@@ -159,9 +159,6 @@ class FPS_GT511C3
 {
 
  public:
-	// Enables verbose debug output using hardware Serial
-	bool UseSerialDebug;
-
 	// Constructor/Destructor
 
 	// Creates a new object to interface with the fingerprint scanner
