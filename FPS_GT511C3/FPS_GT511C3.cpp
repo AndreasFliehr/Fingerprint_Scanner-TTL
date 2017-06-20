@@ -730,9 +730,7 @@ void FPS_GT511C3::SendCommand(byte cmd[], int length)
 // Gets the response to the command from the software serial channel (and waits for it)
 Response_Packet* FPS_GT511C3::GetResponse()
 {
-	using namespace SetupStates;
-	unsigned long currentMillis;
-	unsigned long previousMillis = Timer::getInstance().millis();
+	uint8_t previousSeconds = Timer::getInstance().seconds();
 
 	byte firstbyte = 0;
 	bool done = false;
@@ -744,11 +742,12 @@ Response_Packet* FPS_GT511C3::GetResponse()
 		{
 			done = true;
 		}
-		currentMillis = Timer::getInstance().millis();
-		if (previousMillis < 65350 && currentMillis - previousMillis >= 2000){
+
+		uint8_t currentSeconds = Timer::getInstance().seconds();
+		if (currentSeconds - previousSeconds >= 2){
+			previousSeconds = currentSeconds;
 			Serial.println("FPS not connected.");
-			State::getInstance().setSetupState(NOT_CONNECTED);
-			Serial.println(State::getInstance().getSetupState());
+			State::getInstance().setSetupState(SetupStates::NOT_CONNECTED);
 			return;
 		}
 	}
