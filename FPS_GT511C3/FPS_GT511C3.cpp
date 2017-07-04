@@ -707,8 +707,7 @@ Response_Packet* FPS_GT511C3::GetResponse()
 		uint8_t currentSeconds = Timer::getInstance().seconds();
 		if (currentSeconds - previousSeconds >= 2){
 			previousSeconds = currentSeconds;
-			Serial.println("FPS not connected.");
-			State::getInstance().setSetupState(SetupStates::NOT_CONNECTED);
+			State::getInstance().setSetupState(SetupStates::FPS_ERROR);
 			return;
 		}
 	}
